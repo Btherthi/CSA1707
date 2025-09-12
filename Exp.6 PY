@@ -1,0 +1,36 @@
+class VacuumCleaner:
+    def __init__(self):
+        self.location = 'A'  # Start in room A
+        self.environment = {'A': 'dirty', 'B': 'dirty'}
+
+    def perceive(self):
+        return self.location, self.environment[self.location]
+
+    def act(self):
+        location, status = self.perceive()
+        if status == 'dirty':
+            print(f"Cleaning room {location}")
+            self.environment[location] = 'clean'
+        else:
+            if location == 'A':
+                print("Moving to room B")
+                self.location = 'B'
+            else:
+                print("Moving to room A")
+                self.location = 'A'
+
+    def is_done(self):
+        return all(status == 'clean' for status in self.environment.values())
+
+def main():
+    vacuum = VacuumCleaner()
+    steps = 0
+    while not vacuum.is_done():
+        vacuum.act()
+        steps += 1
+        if steps > 10:  # Just to avoid infinite loops
+            break
+    print("Both rooms are clean!")
+
+if __name__ == "__main__":
+    main()
